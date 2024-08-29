@@ -1,22 +1,20 @@
 const Enquiry = require('../model/Enquiry')
 
-
-const getAllEnquiry = async(req,res)=>{
-
+const getAllEnquiry = async (req, res) => {
   try {
-    const enquiry = await Enquiry.find({});
+    // Fetch all enquiries and sort them by date in descending order
+    const enquiries = await Enquiry.find({}).sort({ date: -1 });
 
-    if (!enquiry) {
-      return res.status(404).json({ error: 'Enquiry not found' });
+    if (!enquiries) {
+      return res.status(404).json({ error: 'Enquiries not found' });
     }
 
-    res.json(enquiry);
+    res.json(enquiries);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 }
-
 
 const postEnquiry = async (req, res) =>{
   try {

@@ -4,11 +4,29 @@ const Property = require('../model/Property')
 
 const getAllProperty = async (req, res) => {
   try {
-      const users = await Property.find();
+      const users = await Property.find().sort({ dateUpload: -1 });
       res.json(users);
   } catch (err) {
       res.status(500).send(err.message);
   }
+};
+
+const getPropertyByType = async (req, res) => {
+  const { propertyType } = req.body;
+
+    try {
+        const properties = await Property.find({ propertyType });
+
+        if (!properties) {
+            return res.status(404).json({ message: 'No properties found for the given type.' });
+        }
+
+        res.status(200).json(properties);
+    } catch (error) {
+        console.error('Error fetching properties:', error);
+        res.status(500).json({ message: 'Server error. Please try again later.' });
+    }
+  
 };
 
 // Function to create a new property
@@ -76,5 +94,6 @@ module.exports = {
     createProperty,
     getOnePropertyById,
     deleteProperty,
-    getLatestProperties
+    getLatestProperties,
+    getPropertyByType
 }

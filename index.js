@@ -33,7 +33,7 @@ app.get('/',(req,res)=>{
     res.send("<h1>Welcome to my API</h1>");
 })
 
-app.listen((error)=>{
+app.listen(port,(error)=>{
     if(!error){
         console.log("The Server is running at PORT:",port)
     }

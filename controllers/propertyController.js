@@ -77,15 +77,21 @@ const deleteProperty = async (req, res) => {
 
 // Function to get the 4 latest properties
 const getLatestProperties = async (req, res) => {
-  try {
-      const latestProperties = await Property.find()
-          .sort({ dateUpload: -1 }) // Sort by dateUpload in descending order
-          .limit(4); // Limit the result to 4 properties
+  const propertyType = 'ongoing';
 
-      res.status(200).json(latestProperties);
+  try {
+      const properties = await Property.find({ propertyType });
+
+      if (!properties) {
+          return res.status(404).json({ message: 'No properties found for the given type.' });
+      }
+
+      res.status(200).json(properties);
   } catch (error) {
-      res.status(500).json({ message: 'Error fetching latest properties', error: error.message });
+      console.error('Error fetching properties:', error);
+      res.status(500).json({ message: 'Server error. Please try again later.' });
   }
+
 };
 
 
